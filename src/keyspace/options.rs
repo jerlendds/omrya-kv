@@ -116,7 +116,7 @@ impl Default for CreateOptions {
             data_block_compression_policy: CompressionPolicy::new([CompressionType::None, CompressionType::None, CompressionType::Lz4]),
 
             #[cfg(not(feature = "lz4"))]
-            data_block_compression_policy: CompressionPolicy::new(&[CompressionType::None]),
+            data_block_compression_policy: CompressionPolicy::new([CompressionType::None]),
 
             index_block_compression_policy: CompressionPolicy::all(CompressionType::None),
 
@@ -699,10 +699,10 @@ mod tests {
         );
         assert_eq!(c.kv_separation_opts, None);
 
-        c = c.with_kv_separation(KvSeparationOptions::default());
+        c = c.with_kv_separation(Some(KvSeparationOptions::default()));
         assert_eq!(
-            c.kv_separation_opts.as_ref().unwrap().compression,
-            CompressionType::None,
+            Some(CompressionType::None),
+            c.kv_separation_opts.as_ref().map(|opts| opts.compression),
         );
 
         c = c.data_block_compression_policy(CompressionPolicy::disabled());
@@ -711,8 +711,8 @@ mod tests {
             CompressionPolicy::disabled(),
         );
         assert_eq!(
-            c.kv_separation_opts.unwrap().compression,
-            CompressionType::None,
+            Some(CompressionType::None),
+            c.kv_separation_opts.map(|opts| opts.compression),
         );
     }
 

@@ -121,6 +121,9 @@ mod path;
 mod poison_dart;
 mod readable;
 mod recovery;
+#[cfg(feature = "secure-keyspaces")]
+#[cfg_attr(docsrs, doc(cfg(feature = "secure-keyspaces")))]
+pub mod secure;
 mod snapshot;
 mod snapshot_nonce;
 mod snapshot_tracker;

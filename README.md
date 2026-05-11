@@ -27,7 +27,10 @@
   </a>
 </p>
 
-*Fjall* _(Nordic: "Mountain")_ is a log-structured, embeddable key-value storage engine written in Rust.
+Forked from commit: `30ab073f3efbc87e4e1ba648e9f06c3136bc38e4`
+Agentically added work: [0000-0007](./work/rfcs/0000-fjall-secure-storage-roadmap.md)
+
+_Fjall_ _(Nordic: "Mountain")_ is a log-structured, embeddable key-value storage engine written in Rust.
 It features:
 
 - A thread-safe BTreeMap-like API
@@ -115,14 +118,14 @@ your application needs.
 After writing data (`insert`, `remove` or committing a write batch/transaction), you can choose to call [`Database::persist`](https://docs.rs/fjall/latest/fjall/struct.Database.html#method.persist) which takes a [`PersistMode`](https://docs.rs/fjall/latest/fjall/enum.PersistMode.html) parameter.
 By default, any operation will flush to OS buffers, but **not** to disk.
 This matches RocksDB's default durability.
-Also, when dropped, the database will try to persist the journal *to disk* synchronously.
+Also, when dropped, the database will try to persist the journal _to disk_ synchronously.
 
 ## Multithreading, Async and Multiprocess
 
 > [!WARNING]
-> A single database may **not** be loaded in parallel from separate *processes*.
+> A single database may **not** be loaded in parallel from separate _processes_.
 
-Fjall is internally synchronized for multi-*threaded* access, so you can clone around the `Database` and `Keyspace`s as needed, without needing to lock yourself.
+Fjall is internally synchronized for multi-_threaded_ access, so you can clone around the `Database` and `Keyspace`s as needed, without needing to lock yourself.
 
 For an async example, see the [`tokio`](https://github.com/fjall-rs/fjall/tree/main/examples/tokio) example.
 
@@ -170,14 +173,21 @@ Conflict checking is done using optimistic concurrency control, meaning transact
 
 Allows using `LZ4` compression, powered by [`lz4_flex`](https://github.com/PSeitz/lz4_flex).
 
-*Enabled by default.*
+_Enabled by default._
 
 ### bytes_1
 
 Uses [`bytes`](https://github.com/tokio-rs/bytes) 1.x as the underlying `Slice` type.
 Otherwise, [`byteview`](https://github.com/fjall-rs/byteview) is used instead.
 
-*Disabled by default.*
+_Disabled by default._
+
+### secure-keyspaces
+
+Enables the experimental secure-keyspace API surface described by the RFCs in [`work/rfcs`](work/rfcs).
+The feature is additive and does not change raw `Database`, `Keyspace`, or transaction behavior.
+
+_Disabled by default._
 
 ## Stable disk format
 

@@ -1,0 +1,7 @@
+[package]
+name = "fjall-secure-keyspaces-guide"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+fjall = { path = "../../", features = ["secure-keyspaces"] }

@@ -455,6 +455,21 @@ impl Database {
     ) -> crate::Result<Keyspace> {
         assert!(is_valid_keyspace_name(name));
 
+        #[cfg(feature = "secure-keyspaces")]
+        if crate::secure::is_reserved_raw_keyspace_name(name) {
+            return Err(crate::Error::ReservedKeyspaceName);
+        }
+
+        self.raw_keyspace(name, create_options)
+    }
+
+    pub(crate) fn raw_keyspace(
+        &self,
+        name: &str,
+        create_options: impl FnOnce() -> KeyspaceCreateOptions,
+    ) -> crate::Result<Keyspace> {
+        assert!(is_valid_keyspace_name(name));
+
         let keyspaces = self.supervisor.keyspaces.write().expect("lock is poisoned");
 
         Ok(if let Some(keyspace) = keyspaces.get(name) {

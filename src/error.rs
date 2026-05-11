@@ -31,6 +31,33 @@ pub enum Error {
     /// Invalid tag detected during decoding
     InvalidTag((&'static str, u8)),
 
+    /// Invalid ordered composite key encoding
+    InvalidCompositeKey(&'static str),
+
+    /// Invalid visibility expression
+    InvalidVisibilityExpression(&'static str),
+
+    /// A required security provider was not configured
+    MissingSecurityProvider(&'static str),
+
+    /// Credentials were rejected by the configured authenticator
+    AuthenticationDenied,
+
+    /// The authenticated identity does not have the required permission
+    PermissionDenied(&'static str),
+
+    /// Raw access to a reserved secure keyspace name was rejected
+    ReservedKeyspaceName,
+
+    /// Encryption or decryption failed closed
+    Crypto(&'static str),
+
+    /// Audit sink failed in fail-closed mode
+    Audit(&'static str),
+
+    /// Secure policy configuration is invalid
+    InvalidPolicy(&'static str),
+
     /// A previous flush / commit operation failed, indicating a hardware-related failure
     ///
     /// Future writes will not be accepted as consistency cannot be guaranteed.
